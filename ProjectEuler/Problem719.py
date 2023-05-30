@@ -1,75 +1,75 @@
 import time, math
 
-start_time = time.time()
+başlangıç_zamanı = time.time()
 
 
-def list_maker(anumber):
-    length = len(str(anumber))
-    array = []
-    for x in range(length + 1):
-        array.append([])
+def liste_oluşturucu(bir_sayı):
+    uzunluk = len(str(bir_sayı))
+    dizi = []
+    for x in range(uzunluk + 1):
+        dizi.append([])
 
-    stack = [anumber]
-    while len(stack) != 0:
-        curr = stack.pop(0)
-        array[len(str(curr))].append(curr)
+    yığın = [bir_sayı]
+    while len(yığın) != 0:
+        şimdiki = yığın.pop(0)
+        dizi[len(str(şimdiki))].append(şimdiki)
 
-        if len(str(curr)) == 1:
+        if len(str(şimdiki)) == 1:
             continue
 
-        remove_first_digit = int(str(curr)[1:])
-        remove_last_digit = curr // 10
+        ilk_haneden_kaldır = int(str(şimdiki)[1:])
+        son_haneden_kaldır = şimdiki // 10
 
-        stack.append(remove_first_digit)
-        stack.append(remove_last_digit)
+        yığın.append(ilk_haneden_kaldır)
+        yığın.append(son_haneden_kaldır)
 
-    for x in range(length + 1):
-        array[x] = list(set(array[x]))
-    return array
-
-
-def partition(number):
-    answer = set()
-    answer.add((number,))
-    for x in range(1, number):
-        for y in partition(number - x):
-            answer.add(tuple(((x,) + y)))
-
-    return sorted([x for x in answer])
+    for x in range(uzunluk + 1):
+        dizi[x] = list(set(dizi[x]))
+    return dizi
 
 
-def compute(limit):
-    total = 0
+def bölümle(bir_sayı):
+    cevap = set()
+    cevap.add((bir_sayı,))
+    for x in range(1, bir_sayı):
+        for y in bölümle(bir_sayı - x):
+            cevap.add(tuple(((x,) + y)))
 
-    for z in range(1, limit + 1):
+    return sorted([x for x in cevap])
+
+
+def hesapla(sınır):
+    toplam = 0
+
+    for z in range(1, sınır + 1):
         if z % 100000 == 0:
             print(z)
-            print(total)
-            print("--- %s seconds ---" % (time.time() - start_time))
+            print(toplam)
+            print("--- %s saniye ---" % (time.time() - başlangıç_zamanı))
         if z % 9 == 0 or z % 9 == 1:
             x = z ** 2
-            temp_list = partition(len(str(x)))[:-1]
+            geçici_liste = bölümle(len(str(x)))[:-1]
 
-            for y in temp_list:
-                temp_num = str(x)
-                temp_total = 0
-                value = ""
+            for y in geçici_liste:
+                geçici_numara = str(x)
+                geçici_toplam = 0
+                değer = ""
 
                 for z in y:
-                    value += temp_num[:z]
+                    değer += geçici_numara[:z]
                     try:
-                        temp_total += int(temp_num[:z])
+                        geçici_toplam += int(geçici_numara[:z])
                     except ValueError:
                         pass
-                    temp_num = temp_num[z:]
-                    # print(value)
+                    geçici_numara = geçici_numara[z:]
+                    # print(değer)
 
-                if value == str(temp_total ** 2):
-                    total += x
+                if değer == str(geçici_toplam ** 2):
+                    toplam += x
                     break
-    return total
+    return toplam
 
 
 if __name__ == "__main__":
-    print(compute(10 ** 6))
-    print("--- %s seconds ---" % (time.time() - start_time))
+    print(hesapla(10 ** 6))
+    print("--- %s saniye ---" % (time.time() - başlangıç_zamanı))
